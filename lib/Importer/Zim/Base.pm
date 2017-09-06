@@ -16,18 +16,32 @@ sub _prepare_args {
 
     my @exports;
     while (@_) {
-        my $symbol = shift;
-        my $opts   = ref $_[0] ? shift : { -as => $symbol };
-        my $export = $opts->{-as};
-        my $sub    = do {
-            no strict 'refs';
-            *{"${package}::${symbol}"}{CODE};
-        };
-        Carp::croak qq{Can't find "$symbol" in "$package"}
-          unless $sub;
-        push @exports, { export => $export, code => $sub };
+        my @symbols = _expand_symbol( $package, shift );
+        my $opts = ref $_[0] ? shift : {};
+        for my $symbol (@symbols) {
+            my $sub = do {
+                no strict 'refs';
+                *{"${package}::${symbol}"}{CODE};
+            };
+            my $export = $opts->{-as} // $symbol;
+            Carp::croak qq{Can't find "$symbol" in "$package"}
+              unless $sub;
+            push @exports, { export => $export, code => $sub };
+        }
     }
     return @exports;
+}
+
+sub _expand_symbol {
+    return $_[1] unless $_[1] =~ /^:/;
+
+    my ( $package, $tag ) = ( $_[0], substr( $_[1], 1 ) );
+    my $symbols = do {
+        no strict 'refs';
+        ${"${package}::EXPORT_TAGS"}{$tag};
+      }
+      or return $_[1];
+    return @$symbols;
 }
 
 1;
