@@ -8,8 +8,11 @@ use Module::Runtime ();
 sub _prepare_args {
     my $class   = shift;
     my $package = shift
-      or Carp::croak qq{Usage: use $class MODULE => EXPORTS...\n};
-    Module::Runtime::require_module($package);
+      or Carp::croak qq{Usage: use $class MODULE => [\%OPTS =>] EXPORTS...\n};
+
+    my $opts = ref $_[0] ? shift : {};
+    my @version = exists $opts->{-version} ? ( $opts->{-version} ) : ();
+    &Module::Runtime::use_module( $package, @version );
 
     my @exports;
     while (@_) {
