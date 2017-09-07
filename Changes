@@ -3,10 +3,12 @@ Release history for Importer-Zim-Base
 
 {{$NEXT}}
 
+0.2.0     2017-09-06 17:58:58-07:00 America/Los_Angeles
+
     - Implement "use IMPORTER MODULE => :TAG"
     - Implement "use IMPORTER MODULE => {-version => V}..."
 
-v0.1.0     2017-09-05 17:31:00-07:00 America/Los_Angeles
+v0.1     2017-09-05 17:31:00-07:00 America/Los_Angeles
 
     - Initial version
 
