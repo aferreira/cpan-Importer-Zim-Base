@@ -16,7 +16,7 @@ sub _prepare_args {
     my @version = exists $opts->{-version} ? ( $opts->{-version} ) : ();
     &Module::Runtime::use_module( $package, @version );
 
-    my @exports;
+    my ( @exports, %seen );
     while (@_) {
         my @symbols = _expand_symbol( $package, shift );
         my $opts = ref $_[0] ? shift : {};
@@ -25,7 +25,11 @@ sub _prepare_args {
             my $export = $opts->{-as} // $symbol;
             Carp::croak qq{Can't find "$symbol" in "$package"}
               unless $sub;
-            push @exports, { export => $export, code => $sub };
+            my $seen = $seen{$export}{$sub}++;
+            Carp::croak qq{Can't import as "$export" twice}
+              if keys %{ $seen{$export} } > 1;
+            push @exports, { export => $export, code => $sub }
+              unless $seen;
         }
     }
     return @exports;
