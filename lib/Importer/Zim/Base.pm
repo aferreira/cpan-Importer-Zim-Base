@@ -2,6 +2,8 @@
 package Importer::Zim::Base;
 
 use 5.018;
+no strict 'refs';
+
 use Carp            ();
 use Module::Runtime ();
 
@@ -19,10 +21,7 @@ sub _prepare_args {
         my @symbols = _expand_symbol( $package, shift );
         my $opts = ref $_[0] ? shift : {};
         for my $symbol (@symbols) {
-            my $sub = do {
-                no strict 'refs';
-                *{"${package}::${symbol}"}{CODE};
-            };
+            my $sub = *{"${package}::${symbol}"}{CODE};
             my $export = $opts->{-as} // $symbol;
             Carp::croak qq{Can't find "$symbol" in "$package"}
               unless $sub;
@@ -36,10 +35,7 @@ sub _expand_symbol {
     return $_[1] unless $_[1] =~ /^:/;
 
     my ( $package, $tag ) = ( $_[0], substr( $_[1], 1 ) );
-    my $symbols = do {
-        no strict 'refs';
-        ${"${package}::EXPORT_TAGS"}{$tag};
-      }
+    my $symbols = ${"${package}::EXPORT_TAGS"}{$tag}
       or return $_[1];
     return @$symbols;
 }
