@@ -24,6 +24,14 @@ use Importer::Zim::Base;
     );
     is_deeply( \@exports, \@expected, "prepare 'M3' => ':tag1'" );
 }
+{
+    my @exports = Importer::Zim::Base->_prepare_args( 'M3' => ':tag1', 'f1' );
+    my @expected = (
+        { export => 'f1', code => \&M3::f1 },
+        { export => 'f2', code => \&M3::f2 },
+    );
+    is_deeply( \@exports, \@expected, "Importing a symbol twice is fine" );
+}
 
 done_testing;
 
