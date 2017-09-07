@@ -26,6 +26,21 @@ use Importer::Zim::Base;
         "prepare 'M1' => 'f1' => { -as => 'g1' }, 'f2', 'f3' => { -as => 'h3' }"
     );
 }
+{
+    my @exports = Importer::Zim::Base->_prepare_args( 'M1' => qw(f1 f1) );
+    my @expected = ( { export => 'f1', code => \&M1::f1 }, );
+    is_deeply( \@exports, \@expected, "Importing a symbol twice is fine" );
+}
+{
+    my @exports = Importer::Zim::Base->_prepare_args(
+        'M1' => ( "f1", "f1" => { -as => 'g1' } ) );
+    my @expected = (
+        { export => 'f1', code => \&M1::f1 },
+        { export => 'g1', code => \&M1::f1 },
+    );
+    is_deeply( \@exports, \@expected,
+        "Importing to different targets is always fine" );
+}
 
 done_testing;
 
