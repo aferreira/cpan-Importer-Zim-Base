@@ -46,7 +46,8 @@ sub _expand_symbol {
     return $_[1] unless $_[1] =~ /^:/;
 
     my ( $package, $tag ) = ( $_[0], substr( $_[1], 1 ) );
-    my $symbols = ${"${package}::EXPORT_TAGS"}{$tag}
+    my $symbols
+      = ${"${package}::"}{'EXPORT_TAGS'} && ${"${package}::EXPORT_TAGS"}{$tag}
       or return $_[1];
     return @$symbols;
 }
@@ -55,7 +56,10 @@ sub _can_export {
     my $package = shift;
     my %exports;
     $exports{$_}++
-      for ( @{"${package}::EXPORT"}, @{"${package}::EXPORT_OK"} );
+      for (
+        ( ${"${package}::"}{'EXPORT'}    ? @{"${package}::EXPORT"}    : () ),
+        ( ${"${package}::"}{'EXPORT_OK'} ? @{"${package}::EXPORT_OK"} : () )
+      );
     return \%exports;
 }
 
