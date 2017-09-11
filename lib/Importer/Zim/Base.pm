@@ -16,11 +16,18 @@ sub _prepare_args {
     my @version = exists $opts->{-version} ? ( $opts->{-version} ) : ();
     &Module::Runtime::use_module( $package, @version );
 
+    my $strict = 1;
+    $strict = $opts->{-strict} if exists $opts->{-strict};
+    my $can_export;
+    $can_export = _can_export($package) if $strict;
+
     my ( @exports, %seen );
     while (@_) {
         my @symbols = _expand_symbol( $package, shift );
         my $opts = ref $_[0] ? shift : {};
         for my $symbol (@symbols) {
+            Carp::croak qq{"$symbol" is not exported by the $package module}
+              if $can_export && !$can_export->{$symbol};
             my $sub = *{"${package}::${symbol}"}{CODE};
             my $export = $opts->{-as} // $symbol;
             Carp::croak qq{Can't find "$symbol" in "$package"}
@@ -42,6 +49,14 @@ sub _expand_symbol {
     my $symbols = ${"${package}::EXPORT_TAGS"}{$tag}
       or return $_[1];
     return @$symbols;
+}
+
+sub _can_export {
+    my $package = shift;
+    my %exports;
+    $exports{$_}++
+      for ( @{"${package}::EXPORT"}, @{"${package}::EXPORT_OK"} );
+    return \%exports;
 }
 
 1;

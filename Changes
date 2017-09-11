@@ -3,6 +3,9 @@ Release history for Importer-Zim-Base
 
 {{$NEXT}}
 
+    - Implement "use IMPORTER MODULE => {-strict => 0}..."
+    - By default, only import exportable symbols
+
 0.2.0     2017-09-06 17:58:58-07:00 America/Los_Angeles
 
     - Implement "use IMPORTER MODULE => :TAG"
