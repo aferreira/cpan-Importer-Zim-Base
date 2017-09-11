@@ -41,13 +41,23 @@ use Importer::Zim::Base;
     is_deeply( \@exports, \@expected,
         "Importing to different targets is always fine" );
 }
+{
+    my @exports = Importer::Zim::Base->_prepare_args(
+        'M1' => { -strict => 0 } => 'f4' );
+    my @expected = ( { export => 'f4', code => \&M1::f4 }, );
+    is_deeply( \@exports, \@expected,
+        "Importing non-exportable symbols with -strict => 0" )
+}
 
 done_testing;
 
 package M1;
 
-BEGIN { $INC{'M1.pm'} = __FILE__ }
+BEGIN { $INC{'M1.pm'} = __FILE__; }
+BEGIN { our @EXPORT_OK = qw(f1 f2 f3); }
 
 sub f1 { }
 sub f2 { }
 sub f3 { }
+
+sub f4 { }
