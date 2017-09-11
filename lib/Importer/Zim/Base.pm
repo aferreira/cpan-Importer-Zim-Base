@@ -31,6 +31,8 @@ sub _prepare_args {
         for my $symbol (@symbols) {
             Carp::croak qq{"$symbol" is not exported by "$package"}
               if $can_export && !$can_export->{$symbol};
+            Carp::croak qq{Can't handle "$symbol"}
+              if $symbol =~ /^[\$\@\%\*]/;
             my $sub = *{"${package}::${symbol}"}{CODE};
             my $export = $opts->{-as} // $symbol;
             Carp::croak qq{Can't find "$symbol" in "$package"}
