@@ -63,11 +63,14 @@ sub _expand_symbol {
 sub _can_export {
     my $package = shift;
     my %exports;
-    $exports{$_}++
-      for (
+    for (
         ( ${"${package}::"}{'EXPORT'}    ? @{"${package}::EXPORT"}    : () ),
         ( ${"${package}::"}{'EXPORT_OK'} ? @{"${package}::EXPORT_OK"} : () )
-      );
+      )
+    {
+        my $x = /^&/ ? substr( $_, 1 ) : $_;
+        $exports{$x}++;
+    }
     return \%exports;
 }
 
