@@ -22,6 +22,7 @@ sub _prepare_args {
     $can_export = _can_export($package) if $strict;
 
     my ( @exports, %seen );
+    @_ = @{"${package}::EXPORT"} unless @_ || !${"${package}::"}{'EXPORT'};
     while (@_) {
         my @symbols = _expand_symbol( $package, shift );
         my $opts = ref $_[0] ? shift : {};

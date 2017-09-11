@@ -3,6 +3,7 @@ Release history for Importer-Zim-Base
 
 {{$NEXT}}
 
+    - If no explicit symbols are given, default to @EXPORT
     - Implement "use IMPORTER MODULE => {-strict => 0}..."
     - By default, only import exportable symbols
 
