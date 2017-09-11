@@ -7,6 +7,7 @@ package M3;
 BEGIN { $INC{'M3.pm'} = __FILE__ }
 
 our %EXPORT_TAGS = ( 'tag1' => [qw(f1 f2)], );
+our @EXPORT_OK = qw(f1 f2);
 
 sub f1 { }
 sub f2 { }
