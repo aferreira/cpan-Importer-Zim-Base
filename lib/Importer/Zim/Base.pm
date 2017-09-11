@@ -29,7 +29,7 @@ sub _prepare_args {
         my @symbols = _expand_symbol( $package, shift );
         my $opts = ref $_[0] ? shift : {};
         for my $symbol (@symbols) {
-            Carp::croak qq{"$symbol" is not exported by the $package module}
+            Carp::croak qq{"$symbol" is not exported by "$package"}
               if $can_export && !$can_export->{$symbol};
             my $sub = *{"${package}::${symbol}"}{CODE};
             my $export = $opts->{-as} // $symbol;
