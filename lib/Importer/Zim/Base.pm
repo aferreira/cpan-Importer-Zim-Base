@@ -56,4 +56,8 @@ Importer::Zim::Base - Base module for Importer::Zim
 
 No public interface.
 
+=head1 SEE ALSO
+
+L<Importer::Zim>
+
 =cut
