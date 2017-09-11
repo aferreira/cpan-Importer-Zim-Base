@@ -57,7 +57,7 @@ sub _expand_symbol {
     my $symbols
       = ${"${package}::"}{'EXPORT_TAGS'} && ${"${package}::EXPORT_TAGS"}{$tag}
       or return $_[1];
-    return @$symbols;
+    return map { /^&/ ? substr( $_, 1 ) : $_ } @$symbols;
 }
 
 sub _can_export {
