@@ -7,6 +7,8 @@ no strict 'refs';
 use Carp            ();
 use Module::Runtime ();
 
+use constant DEBUG => $ENV{IMPORTER_ZIM_DEBUG} || 0;
+
 sub _prepare_args {
     my $class   = shift;
     my $package = shift
@@ -36,8 +38,11 @@ sub _prepare_args {
             my $seen = $seen{$export}{$sub}++;
             Carp::croak qq{Can't import as "$export" twice}
               if keys %{ $seen{$export} } > 1;
-            push @exports, { export => $export, code => $sub }
-              unless $seen;
+            unless ($seen) {
+                warn(qq{Importing "${package}::${symbol}" as "$export"\n})
+                  if DEBUG;
+                push @exports, { export => $export, code => $sub };
+            }
         }
     }
     return @exports;
@@ -75,6 +80,13 @@ Importer::Zim::Base - Base module for Importer::Zim
 =head1 DESCRIPTION
 
 No public interface.
+
+=head1 DEBUGGING
+
+You can set the C<IMPORTER_ZIM_DEBUG> environment variable
+for get some diagnostics information printed to C<STDERR>.
+
+    IMPORTER_ZIM_DEBUG=1
 
 =head1 SEE ALSO
 
