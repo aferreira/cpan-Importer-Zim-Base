@@ -49,7 +49,9 @@ sub _prepare_args {
 }
 
 sub _expand_symbol {
-    return $_[1] unless $_[1] =~ /^:/;
+    return $_[1] unless $_[1] =~ /^[:&]/;
+
+    return substr( $_[1], 1 ) if $_[1] =~ /^&/;
 
     my ( $package, $tag ) = ( $_[0], substr( $_[1], 1 ) );
     my $symbols
