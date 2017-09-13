@@ -82,7 +82,7 @@ sub _can_export {
 
 =head1 NAME
 
-Importer::Zim::Base - Base module for Importer::Zim
+Importer::Zim::Base - Base module for Importer::Zim backends
 
 =head1 DESCRIPTION
 
