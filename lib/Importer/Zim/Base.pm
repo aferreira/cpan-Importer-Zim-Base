@@ -1,6 +1,8 @@
 
 package Importer::Zim::Base;
 
+# ABSTRACT: Base module for Importer::Zim backends
+
 use 5.018;
 no strict 'refs';
 
@@ -79,10 +81,6 @@ sub _can_export {
 1;
 
 =encoding utf8
-
-=head1 NAME
-
-Importer::Zim::Base - Base module for Importer::Zim backends
 
 =head1 DESCRIPTION
 
