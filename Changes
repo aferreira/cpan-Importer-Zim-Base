@@ -3,6 +3,11 @@ Release history for Importer-Zim-Base
 
 {{$NEXT}}
 
+    - Implement "... EXPORT => {-map => $sub}..."
+    - Implement "... EXPORT => {-prefix => $prefix}..."
+    - Implement "use IMPORTER MODULE => {-map => $sub}..."
+    - Implement "use IMPORTER MODULE => {-prefix => $prefix}..."
+
 v0.3     2017-09-13 12:49:00-07:00 America/Los_Angeles
 
     - If no explicit symbols are given, default to @EXPORT

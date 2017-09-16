@@ -16,27 +16,25 @@ sub _prepare_args {
     my $package = shift
       or Carp::croak qq{Usage: use $class MODULE => [\%OPTS =>] EXPORTS...\n};
 
-    my $opts = ref $_[0] ? shift : {};
+    my $opts = _module_opts( ref $_[0] ? shift : {} );
     my @version = exists $opts->{-version} ? ( $opts->{-version} ) : ();
     &Module::Runtime::use_module( $package, @version );
 
-    my $strict = 1;
-    $strict = $opts->{-strict} if exists $opts->{-strict};
     my $can_export;
-    $can_export = _can_export($package) if $strict;
+    $can_export = _can_export($package) if $opts->{-strict};
 
     my ( @exports, %seen );
     @_ = @{"${package}::EXPORT"} unless @_ || !${"${package}::"}{'EXPORT'};
     while (@_) {
         my @symbols = _expand_symbol( $package, shift );
-        my $opts = ref $_[0] ? shift : {};
+        my $opts = _import_opts( ref $_[0] ? shift : {}, $opts );
         for my $symbol (@symbols) {
             Carp::croak qq{"$symbol" is not exported by "$package"}
               if $can_export && !$can_export->{$symbol};
             Carp::croak qq{Can't handle "$symbol"}
               if $symbol =~ /^[\$\@\%\*]/;
             my $sub = *{"${package}::${symbol}"}{CODE};
-            my $export = $opts->{-as} // $symbol;
+            my $export = $opts->{-map}->( $opts->{-as} // $symbol );
             Carp::croak qq{Can't find "$symbol" in "$package"}
               unless $sub;
             my $seen = $seen{$export}{$sub}++;
@@ -50,6 +48,36 @@ sub _prepare_args {
         }
     }
     return @exports;
+}
+
+sub _module_opts {
+    state $IS_MODULE_OPTION
+      = { map { ; "-$_" => 1 } qw(how map prefix strict version) };
+
+    my %opts = ( -strict => !!1 );
+    my $o = $_[0];
+    $opts{-strict} = !!$o->{-strict} if exists $o->{-strict};
+    exists $o->{-map} and $opts{-map} = $o->{-map}
+      or exists $o->{-prefix} and $opts{-map} = sub { $o->{-prefix} . $_[0] };
+    if ( my @bad = grep { !$IS_MODULE_OPTION->{$_} } keys %$o ) {
+        Carp::carp qq{Ignoring unknown module options (@bad)\n};
+    }
+    return \%opts;
+}
+
+# $opts = _import_opts($opts1, $m_opts);
+sub _import_opts {
+    state $IS_IMPORT_OPTION = { map { ; "-$_" => 1 } qw(as map prefix) };
+
+    my %opts = ( -map => exists $_[1]{-map} ? $_[1]{-map} : sub { $_[0] } );
+    my $o = $_[0];
+    $opts{-as} = $o->{-as} if exists $o->{-as};
+    exists $o->{-map} and $opts{-map} = $o->{-map}
+      or exists $o->{-prefix} and $opts{-map} = sub { $o->{-prefix} . $_[0] };
+    if ( my @bad = grep { !$IS_IMPORT_OPTION->{$_} } keys %$o ) {
+        Carp::carp qq{Ignoring unknown symbol options (@bad)\n};
+    }
+    return \%opts;
 }
 
 sub _expand_symbol {
