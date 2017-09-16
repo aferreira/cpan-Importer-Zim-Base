@@ -16,7 +16,7 @@ sub _prepare_args {
     my $package = shift
       or Carp::croak qq{Usage: use $class MODULE => [\%OPTS =>] EXPORTS...\n};
 
-    my $opts = _module_opts( ref $_[0] ? shift : {} );
+    my $opts = _module_opts( ref $_[0] eq 'HASH' ? shift : {} );
     my @version = exists $opts->{-version} ? ( $opts->{-version} ) : ();
     &Module::Runtime::use_module( $package, @version );
 
@@ -27,7 +27,7 @@ sub _prepare_args {
     @_ = @{"${package}::EXPORT"} unless @_ || !${"${package}::"}{'EXPORT'};
     while (@_) {
         my @symbols = _expand_symbol( $package, shift );
-        my $opts = _import_opts( ref $_[0] ? shift : {}, $opts );
+        my $opts = _import_opts( ref $_[0] eq 'HASH' ? shift : {}, $opts );
         for my $symbol (@symbols) {
             Carp::croak qq{"$symbol" is not exported by "$package"}
               if $can_export && !$can_export->{$symbol};
@@ -81,7 +81,9 @@ sub _import_opts {
 }
 
 sub _expand_symbol {
-    return $_[1] unless $_[1] =~ /^[:&]/;
+    return $_[1] unless ref $_[1] || $_[1] =~ /^[:&]/;
+
+    return map { /^&/ ? substr( $_, 1 ) : $_ } @{ $_[1] } if ref $_[1];
 
     return substr( $_[1], 1 ) if $_[1] =~ /^&/;
 

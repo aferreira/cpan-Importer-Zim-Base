@@ -3,6 +3,7 @@ Release history for Importer-Zim-Base
 
 {{$NEXT}}
 
+    - Implement "use IMPORTER MODULE => \@SYMBOLS"
     - Implement "... EXPORT => {-map => $sub}..."
     - Implement "... EXPORT => {-prefix => $prefix}..."
     - Implement "use IMPORTER MODULE => {-map => $sub}..."
