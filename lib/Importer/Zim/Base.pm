@@ -112,6 +112,9 @@ sub _can_export {
 
 =head1 DESCRIPTION
 
+   "The Earth is safe once more, GIR! Now let's go destroy it!"
+     – Zim
+
 No public interface.
 
 =head1 DEBUGGING
