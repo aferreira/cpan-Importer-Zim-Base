@@ -3,6 +3,8 @@ Release history for Importer-Zim-Base
 
 {{$NEXT}}
 
+    - Reduced perl requirement to 5.10.1
+
 v0.5     2017-09-20 21:03:47-07:00 America/Los_Angeles
 
     - Now -map subroutines expect the argument at $_

@@ -3,7 +3,7 @@ package Importer::Zim::Base;
 
 # ABSTRACT: Base module for Importer::Zim backends
 
-use 5.018;
+use 5.010001;
 no strict 'refs';
 
 use Carp            ();
