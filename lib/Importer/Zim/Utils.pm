@@ -75,6 +75,9 @@ sub _get_exports {
 
 =head1 DESCRIPTION
 
+    "For longer than I can remember, I've been looking for someone like you."
+      – Tak
+
 No public interface.
 
 =head1 SEE ALSO
