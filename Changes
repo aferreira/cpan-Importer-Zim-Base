@@ -3,6 +3,8 @@ Release history for Importer-Zim-Base
 
 {{$NEXT}}
 
+    - Apply indentation to DEBUG messages
+
 v0.6     2017-09-25 12:01:45-07:00 America/Los_Angeles
 
     - Reduced perl requirement to 5.10.1

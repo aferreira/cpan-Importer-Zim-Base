@@ -44,7 +44,7 @@ sub _prepare_args {
             Carp::croak qq{Can't import as "$export" twice}
               if keys %{ $seen{$export} } > 1;
             unless ($seen) {
-                warn(qq{Importing "${package}::${symbol}" as "$export"\n})
+                warn(qq{  Importing "${package}::${symbol}" as "$export"\n})
                   if DEBUG;
                 push @exports, { export => $export, code => $sub };
             }
