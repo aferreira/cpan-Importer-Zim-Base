@@ -23,7 +23,7 @@ sub import {
     my $exports = shift->_get_exports(@_);
 
     if (USE_LEXICAL_SUBS) {
-        @_ = ($exports);
+        @_ = %$exports;
         goto &Sub::Inject::sub_inject;
     }
 
