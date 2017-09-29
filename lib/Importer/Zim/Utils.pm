@@ -7,7 +7,10 @@ use 5.010001;
 
 our @EXPORT_OK = qw(DEBUG carp croak);
 
-sub DEBUG () { $ENV{IMPORTER_ZIM_DEBUG} || 0 }
+BEGIN {
+    my $v = $ENV{IMPORTER_ZIM_DEBUG} || 0;
+    *DEBUG = sub () {$v};
+}
 
 sub carp  { require Carp; goto &Carp::carp; }
 sub croak { require Carp; goto &Carp::croak; }
