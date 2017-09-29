@@ -17,9 +17,12 @@ sub croak { require Carp; goto &Carp::croak; }
 
 ### import / unimport machinery
 
-sub USE_LEXICAL_SUBS () {    # Is Sub::Inject loaded?
-    require Module::Runtime;
-    return !!$INC{ Module::Runtime::module_notional_filename('Sub::Inject') };
+BEGIN {
+    my $v
+      = $ENV{IMPORTER_ZIM_NO_LEXICAL}
+      ? !1
+      : !!eval 'use Sub::Inject 0.2.0 (); 1';
+    *USE_LEXICAL_SUBS = sub () {$v};
 }
 
 sub import {
