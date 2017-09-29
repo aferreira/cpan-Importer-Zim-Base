@@ -3,7 +3,10 @@ Release history for Importer-Zim-Base
 
 {{$NEXT}}
 
-    - Make sure DEBUG is a constant function
+v0.8     2017-09-29 09:12:00-07:00 America/Los_Angeles
+
+    - Utils: load Sub::Inject if available
+    - Utils: Make sure DEBUG is a constant function
 
 v0.7     2017-09-28 17:30:48-07:00 America/Los_Angeles
 
