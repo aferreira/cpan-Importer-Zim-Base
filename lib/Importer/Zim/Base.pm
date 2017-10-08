@@ -75,17 +75,24 @@ sub _import_opts {
       = { map { ; "-$_" => 1 } qw(as filter map prefix) };
 
     my %opts;
-    exists $_[1]{-filter} and $opts{-filter} = $_[1]{-filter};
-    exists $_[1]{-map}    and $opts{-map}    = $_[1]{-map};
+    exists $_[1]{-filter}
+      and $opts{-filter} = _expand_filter( $_[1]{-filter} );
+    exists $_[1]{-map} and $opts{-map} = $_[1]{-map};
     my $o = $_[0];
     $opts{-as} = $o->{-as} if exists $o->{-as};
-    exists $o->{-filter} and $opts{-filter} = $o->{-filter};
+    exists $o->{-filter} and $opts{-filter} = _expand_filter( $o->{-filter} );
     exists $o->{-map}    and $opts{-map}    = $o->{-map}
       or exists $o->{-prefix} and $opts{-map} = sub { $o->{-prefix} . $_ };
+
     if ( my @bad = grep { !$IS_IMPORT_OPTION->{$_} } keys %$o ) {
         carp qq{Ignoring unknown symbol options (@bad)\n};
     }
     return \%opts;
+}
+
+sub _expand_filter {
+    my $filter = shift;
+    ref $filter eq 'Regexp' ? sub {/$filter/} : $filter;
 }
 
 sub _expand_symbol {
