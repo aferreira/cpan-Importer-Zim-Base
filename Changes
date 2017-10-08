@@ -3,6 +3,8 @@ Release history for Importer-Zim-Base
 
 {{$NEXT}}
 
+    - Implement "... EXPORT => {-filter => $sub}..."
+    - Implement "use IMPORTER MODULE => {-filter => $sub}..."
     - Add Importer::Zim::Bogus to the distribution
 
 v0.8     2017-09-29 09:12:00-07:00 America/Los_Angeles
