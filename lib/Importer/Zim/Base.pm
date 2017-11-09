@@ -15,8 +15,7 @@ sub import_into {
     carp "$class->import(@_)" if DEBUG;
     my @exports = _prepare_args( $class, @_ );
 
-    # Shortcut / evil optimization for +Lexical backend
-    if ( $class eq 'Importer::Zim::Lexical' ) {
+    if ( $class eq 'Importer::Zim::Lexical' ) {    # +Lexical backend
 
         # require Sub::Inject;
         @_ = map { @{$_}{qw(export code)} } @exports;
@@ -24,9 +23,14 @@ sub import_into {
     }
 
     my $caller = caller;
-    return $class->can('_export_to')->(    #
+    return $class->can('_export_to')->(            #
         map { ; "${caller}::$_->{export}" => $_->{code} } @exports
     );
+
+    ## Non-optimized code
+    #my $caller = caller;
+    #@_ = $caller, map { @{$_}{qw(export code)} } @exports;
+    #goto &{ $class->can('export_to') };
 }
 
 sub _prepare_args {
