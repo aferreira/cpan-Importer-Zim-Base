@@ -5,24 +5,14 @@ package Importer::Zim::Bogus;
 
 use 5.010001;
 
-use Importer::Zim::Base;
-BEGIN { our @ISA = qw(Importer::Zim::Base); }
-
 use Importer::Zim::Utils qw(DEBUG carp);
 
 sub import {
-    my $class = shift;
-
     carp
       qq{WARNING! Using bogus Importer::Zim backend (you may need to install a proper backend)};
 
-    carp "$class->import(@_)" if DEBUG;
-    my @exports = $class->_prepare_args(@_);
-
-    my $caller = caller;
-    return _export_to(    #
-        map { ; "${caller}::$_->{export}" => $_->{code} } @exports
-    );
+    require Importer::Zim::Base;
+    goto &Importer::Zim::Base::import_into;
 }
 
 sub export_to {

@@ -3,6 +3,7 @@ Release history for Importer-Zim-Base
 
 {{$NEXT}}
 
+    - +Bogus: lift dependency on +Base to runtime
     - Importer::Zim::Base: import_into() function
 
 v0.11    2017-11-08 17:04:22-08:00 America/Los_Angeles
