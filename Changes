@@ -3,6 +3,8 @@ Release history for Importer-Zim-Base
 
 {{$NEXT}}
 
+v0.12    2017-11-09 11:14:11-08:00 America/Los_Angeles
+
     - Aggressive optimization of import_into() for +Lexical backend
     - +Bogus: lift dependency on +Base to runtime
     - Importer::Zim::Base: import_into() function
