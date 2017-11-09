@@ -8,9 +8,6 @@ use 5.010001;
 use Importer::Zim::Utils qw(DEBUG carp);
 
 sub import {
-    carp
-      qq{WARNING! Using bogus Importer::Zim backend (you may need to install a proper backend)};
-
     require Importer::Zim::Base;
     goto &Importer::Zim::Base::import_into;
 }
@@ -24,6 +21,9 @@ sub export_to {
 
 sub _export_to {
     my %imports = @_;
+
+    carp
+      qq{WARNING! Using bogus Importer::Zim backend (you may need to install a proper backend)};
 
     no strict 'refs';
     for ( keys %imports ) {
