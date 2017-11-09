@@ -9,6 +9,18 @@ use Module::Runtime ();
 
 use Importer::Zim::Utils qw(DEBUG carp croak);
 
+sub import_into {
+    my $class = shift;
+
+    carp "$class->import(@_)" if DEBUG;
+    my @exports = _prepare_args( $class, @_ );
+
+    my $caller = caller;
+    return $class->can('_export_to')->(    #
+        map { ; "${caller}::$_->{export}" => $_->{code} } @exports
+    );
+}
+
 sub _prepare_args {
     my $class   = shift;
     my $package = shift
