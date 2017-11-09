@@ -21,6 +21,17 @@ sub import_into {
     );
 }
 
+sub inject_into {                          # +Lexical backend
+    my $class = shift;
+
+    carp "$class->import(@_)" if DEBUG;
+    my @exports = _prepare_args( $class, @_ );
+
+    # require Sub::Inject;
+    @_ = map { @{$_}{qw(export code)} } @exports;
+    goto &Sub::Inject::sub_inject;
+}
+
 sub _prepare_args {
     my $class   = shift;
     my $package = shift
