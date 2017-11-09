@@ -3,7 +3,7 @@ Release history for Importer-Zim-Base
 
 {{$NEXT}}
 
-    - Importer::Zim::Base: inject_into() function
+    - Aggressive optimization of import_into() for +Lexical backend
     - +Bogus: lift dependency on +Base to runtime
     - Importer::Zim::Base: import_into() function
 

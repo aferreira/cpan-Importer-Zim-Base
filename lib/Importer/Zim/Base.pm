@@ -15,21 +15,18 @@ sub import_into {
     carp "$class->import(@_)" if DEBUG;
     my @exports = _prepare_args( $class, @_ );
 
+    # Shortcut / evil optimization for +Lexical backend
+    if ( $class eq 'Importer::Zim::Lexical' ) {
+
+        # require Sub::Inject;
+        @_ = map { @{$_}{qw(export code)} } @exports;
+        goto &Sub::Inject::sub_inject;
+    }
+
     my $caller = caller;
     return $class->can('_export_to')->(    #
         map { ; "${caller}::$_->{export}" => $_->{code} } @exports
     );
-}
-
-sub inject_into {                          # +Lexical backend
-    my $class = shift;
-
-    carp "$class->import(@_)" if DEBUG;
-    my @exports = _prepare_args( $class, @_ );
-
-    # require Sub::Inject;
-    @_ = map { @{$_}{qw(export code)} } @exports;
-    goto &Sub::Inject::sub_inject;
 }
 
 sub _prepare_args {
