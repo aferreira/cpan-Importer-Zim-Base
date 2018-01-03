@@ -5,7 +5,7 @@ package Importer::Zim::Base;
 
 use 5.010001;
 
-use Module::Runtime ();
+use Module::Spec::V1 ();
 
 use Importer::Zim::Utils qw(DEBUG carp croak);
 
@@ -40,7 +40,7 @@ sub _prepare_args {
 
     my $opts = _module_opts( ref $_[0] eq 'HASH' ? shift : {} );
     my @version = exists $opts->{-version} ? ( $opts->{-version} ) : ();
-    &Module::Runtime::use_module( $package, @version );
+    $package = Module::Spec::V1::need_module( [ $package, @version ] );
 
     my $can_export = _can_export($package);
 
