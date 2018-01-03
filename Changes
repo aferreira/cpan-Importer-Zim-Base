@@ -3,6 +3,9 @@ Release history for Importer-Zim-Base
 
 {{$NEXT}}
 
+    - Add support for module specs (see Module::Spec::V1)
+    - Module::Spec::V1 replaces Module::Runtime as dependency
+
 v0.12    2017-11-09 11:14:11-08:00 America/Los_Angeles
 
     - Aggressive optimization of import_into() for +Lexical backend
